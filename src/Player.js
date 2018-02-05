@@ -32,7 +32,7 @@ class Player extends EventEmitter {
     this._path = path;
     this._options = options;
 
-    this._playerId = playerId++;
+    this._playerId = options.id ? options.id : playerId++;
     this._reset();
 
     let appEventEmitter = Platform.OS === 'ios' ? NativeAppEventEmitter : DeviceEventEmitter;
@@ -50,6 +50,7 @@ class Player extends EventEmitter {
     this._duration = -1;
     this._position = -1;
     this._lastSync = -1;
+    this._speed = 1;
     this._looping = false;
   }
 
@@ -240,6 +241,11 @@ class Player extends EventEmitter {
     this._setIfInitialized({'looping': value});
   }
 
+  set speed(value) {
+    this._speed = value;
+    this._setIfInitialized({'speed': value});
+  }
+
   get currentTime() {
     let pos = -1;
 
@@ -260,6 +266,7 @@ class Player extends EventEmitter {
   get volume() { return this._volume; }
   get looping() { return this._looping; }
   get duration() { return this._duration; }
+  get speed() { return this._speed }
 
   get state()      { return this._state; }
   get canPlay()    { return this._state >= MediaStates.PREPARED; }
